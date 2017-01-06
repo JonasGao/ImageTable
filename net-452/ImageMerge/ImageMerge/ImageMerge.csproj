@@ -60,6 +60,9 @@
     <Compile Include="PathInput.xaml.cs">
       <DependentUpon>PathInput.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SizeInput.xaml.cs">
+      <DependentUpon>SizeInput.xaml</DependentUpon>
+    </Compile>
     <Compile Include="StopMergeException.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -74,6 +77,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="PathInput.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SizeInput.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

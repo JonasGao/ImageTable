@@ -3,49 +3,61 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:imageMerge="clr-namespace:ImageMerge"
         mc:Ignorable="d"
         Title="MainWindow" Height="468.761" Width="1090.29" MinWidth="1200">
-    <Window.CommandBindings>
-        <CommandBinding Command="ApplicationCommands.Paste" Executed="PasteExecuted" />
-    </Window.CommandBindings>
     <Grid>
-        <TextBlock Margin="0,19,370,0" HorizontalAlignment="Right" Width="95" Height="22" VerticalAlignment="Top">日志：</TextBlock>
-
         <ListView Name="ImageListView" Margin="0,37,465,0" BorderThickness="0,1,1,0">
             <ListView.Resources>
                 <Style TargetType="ListViewItem">
-                    <Setter Property="BorderThickness" Value="0"></Setter>
-                    <Setter Property="Padding" Value="0"/>
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="Padding" Value="0" />
                 </Style>
             </ListView.Resources>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Image Source="{Binding}" Width="320" Height="304" Stretch="Fill" PreviewMouseLeftButtonDown="ImageListView_OnPreviewMouseLeftButtonDown" AllowDrop="True" Drop="ImageListView_OnDrop"/>
+                    <Image Source="{Binding}" AllowDrop="True"
+                           Width="{Binding ElementName=TextBlockWidth, Path=Text}"
+                           Height="{Binding ElementName=TextBlockHeight, Path=Text}" Stretch="Fill"
+                           PreviewMouseLeftButtonDown="ImageListView_OnPreviewMouseLeftButtonDown"
+                           Drop="ImageListView_OnDrop" />
                 </DataTemplate>
             </ListView.ItemTemplate>
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapPanel Width="640"/>
+                    <WrapPanel Width="{Binding ElementName=TextBlockPanelWidth, Path=Text}" />
                 </ItemsPanelTemplate>
             </ListView.ItemsPanel>
         </ListView>
 
-        <Button Margin="10,5,0,0" Click="ButtonBase_OnClick" Content="生成" Background="Green" IsEnabled="False" Name="ButtonMerge"
+        <Button Margin="110,5,0,0" Click="ButtonBase_OnClick" Content="生成" Background="Green" IsEnabled="False"
+                Name="ButtonMerge"
                 HorizontalAlignment="Left" Width="95" Height="27" VerticalAlignment="Top" Foreground="White" />
+
         <TextBox IsReadOnly="True" TextWrapping="WrapWithOverflow" AcceptsReturn="True" Margin="0,37,0,0"
                  BorderThickness="1,1,0,0" Name="TextBoxLog" HorizontalAlignment="Right" Width="465" />
-        <Button Margin="122,5,0,0" Click="InputPath_OnClick" Content="输入" Visibility="Hidden"
-            HorizontalAlignment="Left" Width="95" Height="27" VerticalAlignment="Top" />
+        <TextBlock Margin="0,42,365,0" HorizontalAlignment="Right" Width="95" Height="22" VerticalAlignment="Top">日志：</TextBlock>
+
+        <Button Margin="10,5,0,0" Click="InputPath_OnClick" Content="输入"
+                HorizontalAlignment="Left" Width="95" Height="27" VerticalAlignment="Top" />
+
+        <Button Margin="520,5,0,0" Content="添加" HorizontalAlignment="Left" Width="57" Height="27" Name="ButtonSizeAdd" Click="ButtonSizeAdd_OnClick"
+                VerticalAlignment="Top" />
 
         <Grid Background="#7FBDBDBD" Name="GridBackDrop" Visibility="Hidden">
-            <ProgressBar Name="ProgressBarDownloading" Height="24" Width="628"/>
+            <ProgressBar Name="ProgressBarDownloading" Height="24" Width="628" />
         </Grid>
+        <TextBlock Margin="270,10,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left">单图尺寸</TextBlock>
+        <ComboBox Name="ComboBoxPreset" Margin="329,5,0,0" Height="27" VerticalAlignment="Top"
+                  HorizontalAlignment="Left" Width="175" SelectionChanged="ComboBoxPreset_OnSelectionChanged"
+                  Padding="4" />
 
-        <TextBlock Margin="183,10,975,0" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left">宽</TextBlock>
-        <TextBox Name="TextBoxWidth" Margin="201,5,0,0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Left" Width="45" Padding="4"/>
-        <TextBlock Margin="253,10,901,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left">高</TextBlock>
-        <TextBox Name="TextBoxHeight" Margin="271,5,0,0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Left" Width="45" Padding="4"></TextBox>
-        <TextBlock Margin="336,10,818,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left">预设</TextBlock>
-        <ComboBox Name="ComboBoxPreset" Margin="366,5,0,0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Left" Width="175" SelectionChanged="ComboBoxPreset_OnSelectionChanged" Padding="4"></ComboBox>
+        <TextBlock Name="TextBlockWidth" Margin="738,10,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="72">1</TextBlock>
+        <TextBlock Name="TextBlockHeight" Margin="902,10,0,0" HorizontalAlignment="Left" Width="85" Height="17" VerticalAlignment="Top">2</TextBlock>
+        <TextBlock Name="TextBlockPanelWidth" Margin="1068,10,0,0" HorizontalAlignment="Left" Width="101" Height="16" VerticalAlignment="Top">3</TextBlock>
+
+        <TextBlock Name="TextBlockWidthLabel" Margin="635,10,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="87">当前单图宽度</TextBlock>
+        <TextBlock Name="TextBlockHeightLabel" Margin="810,10,0,0" HorizontalAlignment="Left" Width="87" Height="16" VerticalAlignment="Top">当前单图高度</TextBlock>
+        <TextBlock Name="TextBlockPanelWidthLabel" Margin="962,10,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="87">当前总宽度</TextBlock>
     </Grid>
 </Window>

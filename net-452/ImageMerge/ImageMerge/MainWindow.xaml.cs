@@ -19,19 +19,8 @@ namespace ImageMerge
     /// </summary>
     public partial class MainWindow
     {
-        private double _itemWidth, _itemHeight;
-
-        private double ItemWidth
-        {
-            get { return _itemWidth; }
-            set { TextBoxWidth.Text = (_itemWidth = value).ToString(CultureInfo.InvariantCulture); }
-        }
-
-        private double ItemHeight
-        {
-            get { return _itemHeight; }
-            set { TextBoxHeight.Text = (_itemHeight = value).ToString(CultureInfo.InvariantCulture); }
-        }
+        private double ItemWidth { get; set; }
+        private double ItemHeight { get; set; }
 
         private bool _isImageDownloading;
 
@@ -200,12 +189,6 @@ namespace ImageMerge
             IsImageDownloading = false;
         }
 
-        private void PasteExecuted(object sender, ExecutedRoutedEventArgs e)
-        {
-            var content = Clipboard.GetText();
-            LoadImages(content);
-        }
-
         private void InputPath_OnClick(object sender, RoutedEventArgs e)
         {
             var pathInput = new PathInput();
@@ -238,6 +221,22 @@ namespace ImageMerge
             var selectedSize = ((KeyValuePair<string, Size>) ComboBoxPreset.SelectedValue).Value;
             ItemWidth = selectedSize.Width;
             ItemHeight = selectedSize.Height;
+            TextBlockWidth.Text = ItemWidth.ToString(CultureInfo.CurrentCulture);
+            TextBlockHeight.Text = ItemHeight.ToString(CultureInfo.CurrentCulture);
+            TextBlockPanelWidth.Text = (ItemWidth * 2).ToString(CultureInfo.InvariantCulture);
+        }
+
+        private void ButtonSizeAdd_OnClick(object sender, RoutedEventArgs e)
+        {
+            var sizeInput = new SizeInput();
+            var dialogResult = sizeInput.ShowDialog();
+            if (!dialogResult.HasValue || !dialogResult.Value)
+            {
+                return;
+            }
+            var itemsSource = (Dictionary<string, Size>) ComboBoxPreset.ItemsSource;
+            itemsSource.Add(sizeInput.SizeName, sizeInput.Size);
+            ComboBoxPreset.SelectedIndex = itemsSource.Count - 1;
         }
     }
 }
