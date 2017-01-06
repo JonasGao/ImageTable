@@ -1,0 +1,51 @@
+﻿<Window x:Class="ImageMerge.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="468.761" Width="1090.29" MinWidth="1200">
+    <Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.Paste" Executed="PasteExecuted" />
+    </Window.CommandBindings>
+    <Grid>
+        <TextBlock Margin="0,19,370,0" HorizontalAlignment="Right" Width="95" Height="22" VerticalAlignment="Top">日志：</TextBlock>
+
+        <ListView Name="ImageListView" Margin="0,37,465,0" BorderThickness="0,1,1,0">
+            <ListView.Resources>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="BorderThickness" Value="0"></Setter>
+                    <Setter Property="Padding" Value="0"/>
+                </Style>
+            </ListView.Resources>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Image Source="{Binding}" Width="320" Height="304" Stretch="Fill" PreviewMouseLeftButtonDown="ImageListView_OnPreviewMouseLeftButtonDown" AllowDrop="True" Drop="ImageListView_OnDrop"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Width="640"/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+        </ListView>
+
+        <Button Margin="10,5,0,0" Click="ButtonBase_OnClick" Content="生成" Background="Green" IsEnabled="False" Name="ButtonMerge"
+                HorizontalAlignment="Left" Width="95" Height="27" VerticalAlignment="Top" Foreground="White" />
+        <TextBox IsReadOnly="True" TextWrapping="WrapWithOverflow" AcceptsReturn="True" Margin="0,37,0,0"
+                 BorderThickness="1,1,0,0" Name="TextBoxLog" HorizontalAlignment="Right" Width="465" />
+        <Button Margin="122,5,0,0" Click="InputPath_OnClick" Content="输入" Visibility="Hidden"
+            HorizontalAlignment="Left" Width="95" Height="27" VerticalAlignment="Top" />
+
+        <Grid Background="#7FBDBDBD" Name="GridBackDrop" Visibility="Hidden">
+            <ProgressBar Name="ProgressBarDownloading" Height="24" Width="628"/>
+        </Grid>
+
+        <TextBlock Margin="183,10,975,0" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left">宽</TextBlock>
+        <TextBox Name="TextBoxWidth" Margin="201,5,0,0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Left" Width="45" Padding="4"/>
+        <TextBlock Margin="253,10,901,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left">高</TextBlock>
+        <TextBox Name="TextBoxHeight" Margin="271,5,0,0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Left" Width="45" Padding="4"></TextBox>
+        <TextBlock Margin="336,10,818,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left">预设</TextBlock>
+        <ComboBox Name="ComboBoxPreset" Margin="366,5,0,0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Left" Width="175" SelectionChanged="ComboBoxPreset_OnSelectionChanged" Padding="4"></ComboBox>
+    </Grid>
+</Window>

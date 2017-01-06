@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>图片合成</title>
+    <link rel="stylesheet" href="bootstrap-4a5.min.css">
+    <script>
+        var merge = require('./merge');
+        function testMerge() {
+            merge([
+                "http://localhost:3000/1.jpg",
+                "http://localhost:3000/2.jpg",
+                "http://localhost:3000/3.jpg"
+            ]);
+        }
+    </script>
+</head>
+<body>
+    <button onclick="testMerge()" type="button">生成</button>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "imagemerge",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "electron": "^1.4.5",
+    "gm": "^1.23.0"
+  }
+}
