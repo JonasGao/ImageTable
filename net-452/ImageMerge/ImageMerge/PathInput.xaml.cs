@@ -29,7 +29,7 @@ namespace ImageMerge
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
             Paths = TextBoxPaths.Text;
-            Close();
+            DialogResult = true;
         }
     }
 }

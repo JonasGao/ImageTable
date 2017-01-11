@@ -12,7 +12,7 @@ namespace ImageMerge
         private const string RegexD = "\\d+";
 
         internal string SizeName { get; set; }
-        internal Size Size { get; set; }
+        internal LayoutProfile LayoutProfile { get; set; }
 
         public SizeInput()
         {
@@ -24,22 +24,23 @@ namespace ImageMerge
             var name = TextBoxName.Text;
             var width = TextBoxWidth.Text;
             var height = TextBoxHeight.Text;
+            var col = TextBoxCol.Text;
 
-            if (IsNullOrEmpty(name) || IsNullOrEmpty(width) || IsNullOrEmpty(height))
+            if (IsNullOrEmpty(name) || IsNullOrEmpty(width) || IsNullOrEmpty(height) || IsNullOrEmpty(col))
             {
                 MessageBox.Show("请填写完整后添加");
                 return;
             }
 
-            if (!Regex.IsMatch(width, RegexD) || !Regex.IsMatch(height, RegexD))
+            if (!Regex.IsMatch(width, RegexD) || !Regex.IsMatch(height, RegexD) || !Regex.IsMatch(col, RegexD))
             {
-                MessageBox.Show("宽高必须是整数数字");
+                MessageBox.Show("宽高和列必须是整数数字");
                 return;
             }
 
             DialogResult = true;
             SizeName = name;
-            Size = new Size(double.Parse(width), double.Parse(height));
+            LayoutProfile = new LayoutProfile(double.Parse(width), double.Parse(height), int.Parse(col));
         }
     }
 }

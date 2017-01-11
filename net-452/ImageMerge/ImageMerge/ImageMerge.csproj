@@ -63,6 +63,7 @@
     <Compile Include="SizeInput.xaml.cs">
       <DependentUpon>SizeInput.xaml</DependentUpon>
     </Compile>
+    <Compile Include="LayoutProfile.cs" />
     <Compile Include="StopMergeException.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

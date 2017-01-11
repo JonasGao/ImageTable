@@ -21,6 +21,7 @@ namespace ImageMerge
     {
         private double ItemWidth { get; set; }
         private double ItemHeight { get; set; }
+        private int Col { get; set; }
 
         private bool _isImageDownloading;
 
@@ -41,10 +42,10 @@ namespace ImageMerge
             Filter = "图像文件(*.jpg)|*.jpg"
         };
 
-        private readonly Dictionary<string, Size> _presetSizeMap = new Dictionary<string, Size>
+        private readonly ObservableCollection<KeyValuePair<string, LayoutProfile>> _presetSizeMap = new ObservableCollection<KeyValuePair<string, LayoutProfile>>
         {
-            {"天猫", new Size(320, 304)},
-            {"京东", new Size(340, 304)}
+            new KeyValuePair<string, LayoutProfile>("天猫", new LayoutProfile(320, 304, 2)),
+            new KeyValuePair<string, LayoutProfile>("京东", new LayoutProfile(340, 304, 2))
         };
 
         public MainWindow()
@@ -66,8 +67,8 @@ namespace ImageMerge
                 AddLog("没有图片需要生成");
             }
 
-            var totalWidth = ItemWidth*2;
-            var totalHeight = (count/2 + count%2)*ItemHeight;
+            var totalWidth = ItemWidth*Col;
+            var totalHeight = (count/Col + count%Col)*ItemHeight;
 
             var drawingVisual = new DrawingVisual();
             var context = drawingVisual.RenderOpen();
@@ -76,7 +77,7 @@ namespace ImageMerge
             for (var i = 0; i < count; i++)
             {
                 context.DrawImage(Images[i],
-                    new Rect(new Point(i%2*((int) ItemWidth), i/2*((int) ItemHeight)), new Size(ItemWidth, ItemHeight)));
+                    new Rect(new Point(i%Col*((int) ItemWidth), i/Col*((int) ItemHeight)), new Size(ItemWidth, ItemHeight)));
             }
 
             context.Close();
@@ -192,8 +193,9 @@ namespace ImageMerge
         private void InputPath_OnClick(object sender, RoutedEventArgs e)
         {
             var pathInput = new PathInput();
-            pathInput.ShowDialog();
-            LoadImages(pathInput.Paths);
+            var result = pathInput.ShowDialog();
+            if (result.HasValue && result.Value)
+                LoadImages(pathInput.Paths);
         }
 
         private void ImageListView_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -218,12 +220,15 @@ namespace ImageMerge
 
         private void ComboBoxPreset_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var selectedSize = ((KeyValuePair<string, Size>) ComboBoxPreset.SelectedValue).Value;
-            ItemWidth = selectedSize.Width;
-            ItemHeight = selectedSize.Height;
+            var selectedSize = ((KeyValuePair<string, LayoutProfile>) ComboBoxPreset.SelectedValue).Value;
+            ItemWidth = selectedSize.Size.Width;
+            ItemHeight = selectedSize.Size.Height;
+            Col = selectedSize.Col;
+
             TextBlockWidth.Text = ItemWidth.ToString(CultureInfo.CurrentCulture);
             TextBlockHeight.Text = ItemHeight.ToString(CultureInfo.CurrentCulture);
-            TextBlockPanelWidth.Text = (ItemWidth * 2).ToString(CultureInfo.InvariantCulture);
+            TextBlockPanelWidth.Text = (ItemWidth * Col).ToString(CultureInfo.CurrentCulture);
+            TextBlockCol.Text = Col.ToString(CultureInfo.CurrentCulture);
         }
 
         private void ButtonSizeAdd_OnClick(object sender, RoutedEventArgs e)
@@ -234,8 +239,8 @@ namespace ImageMerge
             {
                 return;
             }
-            var itemsSource = (Dictionary<string, Size>) ComboBoxPreset.ItemsSource;
-            itemsSource.Add(sizeInput.SizeName, sizeInput.Size);
+            var itemsSource = (ObservableCollection<KeyValuePair<string, LayoutProfile>>) ComboBoxPreset.ItemsSource;
+            itemsSource.Add(new KeyValuePair<string, LayoutProfile>(sizeInput.SizeName, sizeInput.LayoutProfile));
             ComboBoxPreset.SelectedIndex = itemsSource.Count - 1;
         }
     }
